@@ -14,17 +14,18 @@ module.exports = {
     'prettier/prettier': [
       'error',
       {
-        singleQuote: true,
+        singleQuote: false,
         semi: true,
         useTabs: false,
         tabWidth: 2,
         printWidth: 80,
         bracketSpacing: true,
-        arrowParens: 'avoid',
+        arrowParens: 'always',
+        endOfLine: 'crlf',
       },
     ],
-    '@typescript-eslint/no-explicit-any': 'off',
-    "@typescript-eslint/explicit-function-return-type": 'off',
+    // '@typescript-eslint/no-explicit-any': 'off',
+    // "@typescript-eslint/explicit-function-return-type": 'off',
     'prefer-const': 'off',
   },
   parserOptions: {

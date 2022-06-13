@@ -32,6 +32,9 @@ var arr: StringArray = ["a", "b", "c"];
 // arr[0] = 10;
 
 //!딕셔너리 패턴
+//? 기존에 javascript에서는 object[key] 같은 형식으로 이용했으나,
+//? ts에서는 object에 들어갈 key들이 모두 정의되어 있기 때문에, 임의의 키로 값을 설정하는게 불가능함.
+//? 임의의 key로 사용할 일이 있을때 딕셔너리 패턴을 사용하면 됨.
 interface StringRegexDictionary {
   [key: string]: RegExp;
 }
