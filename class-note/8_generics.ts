@@ -64,6 +64,7 @@ interface ShoppingItem {
   stock: number;
 }
 
+// ShoppingItem의 key 중 하나만 받을수 있음... enum이랑 같음.
 function getShoppingItemOption<T extends keyof ShoppingItem>(itemOption: T): T {
   return itemOption;
 }
