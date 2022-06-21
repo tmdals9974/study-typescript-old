@@ -18,3 +18,44 @@ const product1: Partial<Product> = {};
 const product2: Partial<Product> = { id: 5, name: "test" };
 type shoppingItem = Pick<Product, "id" | "name" | "price">;
 type itemInfo = Omit<Product, "price" | "brand" | "stock">;
+
+
+
+// 유틸리티 타입 구현하기 - Partial
+interface UserProfile { 
+  username: string;
+  email: string;
+  profilePhotoUrl: string;
+}
+
+// #1
+// interface UserProfileUpdate {
+//   username?: string;
+//   email?: string;
+//   profilePhotoUrl?: string;
+// }
+
+// #2
+// type UserProfileUpdate = {
+//   username?: UserProfile['username'];
+//   email?: UserProfile['email'];
+//   profilePhotoUrl?: UserProfile['profilePhotoUrl'];
+// }
+
+// #3 Mapped Type
+// type UserProfileUpdate = {
+//   [p in 'username' | 'email' | 'profilePhotoUrl']?: UserProfile[p]
+// }
+
+// #4 keyof
+// type UserProfileKeys = keyof UserProfile;
+
+// #5 
+// type UserProfileUpdate = {
+//   [p in keyof UserProfile]?: UserProfile[p]
+// }
+
+// 6
+type Subset<T> = { 
+  [p in keyof T]?: T[p]
+}
