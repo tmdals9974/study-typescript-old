@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -42,23 +43,23 @@ function getUnixTimestamp(date) {
     return new Date(date).getTime();
 }
 // DOM
-var confirmedTotal = $('.confirmed-total');
-var deathsTotal = $('.deaths');
-var recoveredTotal = $('.recovered');
-var lastUpdatedTime = $('.last-updated-time');
-var rankList = $('.rank-list');
-var deathsList = $('.deaths-list');
-var recoveredList = $('.recovered-list');
-var deathSpinner = createSpinnerElement('deaths-spinner');
-var recoveredSpinner = createSpinnerElement('recovered-spinner');
+var confirmedTotal = $(".confirmed-total");
+var deathsTotal = $(".deaths");
+var recoveredTotal = $(".recovered");
+var lastUpdatedTime = $(".last-updated-time");
+var rankList = $(".rank-list");
+var deathsList = $(".deaths-list");
+var recoveredList = $(".recovered-list");
+var deathSpinner = createSpinnerElement("deaths-spinner");
+var recoveredSpinner = createSpinnerElement("recovered-spinner");
 function createSpinnerElement(id) {
-    var wrapperDiv = document.createElement('div');
-    wrapperDiv.setAttribute('id', id);
-    wrapperDiv.setAttribute('class', 'spinner-wrapper flex justify-center align-center');
-    var spinnerDiv = document.createElement('div');
-    spinnerDiv.setAttribute('class', 'ripple-spinner');
-    spinnerDiv.appendChild(document.createElement('div'));
-    spinnerDiv.appendChild(document.createElement('div'));
+    var wrapperDiv = document.createElement("div");
+    wrapperDiv.setAttribute("id", id);
+    wrapperDiv.setAttribute("class", "spinner-wrapper flex justify-center align-center");
+    var spinnerDiv = document.createElement("div");
+    spinnerDiv.setAttribute("class", "ripple-spinner");
+    spinnerDiv.appendChild(document.createElement("div"));
+    spinnerDiv.appendChild(document.createElement("div"));
     wrapperDiv.appendChild(spinnerDiv);
     return wrapperDiv;
 }
@@ -67,7 +68,7 @@ var isDeathLoading = false;
 var isRecoveredLoading = false;
 // api
 function fetchCovidSummary() {
-    var url = 'https://api.covid19api.com/summary';
+    var url = "https://api.covid19api.com/summary";
     return axios.get(url);
 }
 function fetchCountryInfo(countryCode, status) {
@@ -82,17 +83,19 @@ function startApp() {
 }
 // events
 function initEvents() {
-    rankList.addEventListener('click', handleListClick);
+    rankList.addEventListener("click", handleListClick);
 }
 function handleListClick(event) {
+    var _a;
     return __awaiter(this, void 0, void 0, function () {
         var selectedId, deathResponse, recoveredResponse, confirmedResponse;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
+                    selectedId = "";
                     if (event.target instanceof HTMLParagraphElement ||
                         event.target instanceof HTMLSpanElement) {
-                        selectedId = event.target.parentElement.id;
+                        selectedId = ((_a = event.target.parentElement) === null || _a === void 0 ? void 0 : _a.id) || "";
                     }
                     if (event.target instanceof HTMLLIElement) {
                         selectedId = event.target.id;
@@ -104,15 +107,15 @@ function handleListClick(event) {
                     clearRecoveredList();
                     startLoadingAnimation();
                     isDeathLoading = true;
-                    return [4 /*yield*/, fetchCountryInfo(selectedId, 'deaths')];
+                    return [4 /*yield*/, fetchCountryInfo(selectedId, "deaths")];
                 case 1:
-                    deathResponse = (_a.sent()).data;
-                    return [4 /*yield*/, fetchCountryInfo(selectedId, 'recovered')];
+                    deathResponse = (_b.sent()).data;
+                    return [4 /*yield*/, fetchCountryInfo(selectedId, "recovered")];
                 case 2:
-                    recoveredResponse = (_a.sent()).data;
-                    return [4 /*yield*/, fetchCountryInfo(selectedId, 'confirmed')];
+                    recoveredResponse = (_b.sent()).data;
+                    return [4 /*yield*/, fetchCountryInfo(selectedId, "confirmed")];
                 case 3:
-                    confirmedResponse = (_a.sent()).data;
+                    confirmedResponse = (_b.sent()).data;
                     endLoadingAnimation();
                     setDeathsList(deathResponse);
                     setTotalDeathsByCountry(deathResponse);
@@ -128,12 +131,12 @@ function handleListClick(event) {
 function setDeathsList(data) {
     var sorted = data.sort(function (a, b) { return getUnixTimestamp(b.Date) - getUnixTimestamp(a.Date); });
     sorted.forEach(function (value) {
-        var li = document.createElement('li');
-        li.setAttribute('class', 'list-item-b flex align-center');
-        var span = document.createElement('span');
+        var li = document.createElement("li");
+        li.setAttribute("class", "list-item-b flex align-center");
+        var span = document.createElement("span");
         span.textContent = value.Cases;
-        span.setAttribute('class', 'deaths');
-        var p = document.createElement('p');
+        span.setAttribute("class", "deaths");
+        var p = document.createElement("p");
         p.textContent = new Date(value.Date).toLocaleDateString().slice(0, -1);
         li.appendChild(span);
         li.appendChild(p);
@@ -141,7 +144,7 @@ function setDeathsList(data) {
     });
 }
 function clearDeathList() {
-    deathsList.innerHTML = null;
+    deathsList.innerHTML = "";
 }
 function setTotalDeathsByCountry(data) {
     deathsTotal.innerText = data[0].Cases;
@@ -149,12 +152,12 @@ function setTotalDeathsByCountry(data) {
 function setRecoveredList(data) {
     var sorted = data.sort(function (a, b) { return getUnixTimestamp(b.Date) - getUnixTimestamp(a.Date); });
     sorted.forEach(function (value) {
-        var li = document.createElement('li');
-        li.setAttribute('class', 'list-item-b flex align-center');
-        var span = document.createElement('span');
+        var li = document.createElement("li");
+        li.setAttribute("class", "list-item-b flex align-center");
+        var span = document.createElement("span");
         span.textContent = value.Cases;
-        span.setAttribute('class', 'recovered');
-        var p = document.createElement('p');
+        span.setAttribute("class", "recovered");
+        var p = document.createElement("p");
         p.textContent = new Date(value.Date).toLocaleDateString().slice(0, -1);
         li.appendChild(span);
         li.appendChild(p);
@@ -162,7 +165,7 @@ function setRecoveredList(data) {
     });
 }
 function clearRecoveredList() {
-    recoveredList.innerHTML = null;
+    recoveredList.innerHTML = "";
 }
 function setTotalRecoveredByCountry(data) {
     recoveredTotal.innerText = data[0].Cases;
@@ -194,18 +197,18 @@ function setupData() {
     });
 }
 function renderChart(data, labels) {
-    var ctx = $('#lineChart').getContext('2d');
-    Chart.defaults.color = '#f5eaea';
-    Chart.defaults.font.family = 'Exo 2';
+    var ctx = $("#lineChart").getContext("2d");
+    Chart.defaults.color = "#f5eaea";
+    Chart.defaults.font.family = "Exo 2";
     new Chart(ctx, {
-        type: 'line',
+        type: "line",
         data: {
             labels: labels,
             datasets: [
                 {
-                    label: 'Confirmed for the last two weeks',
-                    backgroundColor: '#feb72b',
-                    borderColor: '#feb72b',
+                    label: "Confirmed for the last two weeks",
+                    backgroundColor: "#feb72b",
+                    borderColor: "#feb72b",
                     data: data,
                 },
             ],
@@ -221,25 +224,25 @@ function setChartData(data) {
     renderChart(chartData, chartLabel);
 }
 function setTotalConfirmedNumber(data) {
-    confirmedTotal.innerText = data.Countries.reduce(function (total, current) { return (total += current.TotalConfirmed); }, 0);
+    confirmedTotal.innerText = data.Countries.reduce(function (total, current) { return (total += current.TotalConfirmed); }, 0).toString();
 }
 function setTotalDeathsByWorld(data) {
-    deathsTotal.innerText = data.Countries.reduce(function (total, current) { return (total += current.TotalDeaths); }, 0);
+    deathsTotal.innerText = data.Countries.reduce(function (total, current) { return (total += current.TotalDeaths); }, 0).toString();
 }
 function setTotalRecoveredByWorld(data) {
-    recoveredTotal.innerText = data.Countries.reduce(function (total, current) { return (total += current.TotalRecovered); }, 0);
+    recoveredTotal.innerText = data.Countries.reduce(function (total, current) { return (total += current.TotalRecovered); }, 0).toString();
 }
 function setCountryRanksByConfirmedCases(data) {
     var sorted = data.Countries.sort(function (a, b) { return b.TotalConfirmed - a.TotalConfirmed; });
     sorted.forEach(function (value) {
-        var li = document.createElement('li');
-        li.setAttribute('class', 'list-item flex align-center');
-        li.setAttribute('id', value.Slug);
-        var span = document.createElement('span');
-        span.textContent = value.TotalConfirmed;
-        span.setAttribute('class', 'cases');
-        var p = document.createElement('p');
-        p.setAttribute('class', 'country');
+        var li = document.createElement("li");
+        li.setAttribute("class", "list-item flex align-center");
+        li.setAttribute("id", value.Slug);
+        var span = document.createElement("span");
+        span.textContent = value.TotalConfirmed.toString();
+        span.setAttribute("class", "cases");
+        var p = document.createElement("p");
+        p.setAttribute("class", "country");
         p.textContent = value.Country;
         li.appendChild(span);
         li.appendChild(p);
