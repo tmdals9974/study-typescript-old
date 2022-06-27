@@ -6,7 +6,7 @@
     "moduleResolution": "Node", //Promise 인식 옵션
     "lib": ["ES2015", "DOM", "DOM.Iterable"], //라이브러리 추가
     "noImplicitAny": true,
-    "strict": true,
+    // "strict": true,
   },
   "include": ["./src/**/*"], //폴더 추가
   "exclude": ["node_modules", "dist"] //폴더 제외 (기본값으로 이미 등록되어 있음)
