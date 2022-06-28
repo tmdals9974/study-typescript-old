@@ -49,7 +49,7 @@ function fetchCountryInfo(countryCode: string, status: CovidStatus): Promise<Axi
 }
 
 // methods
-function startApp() {
+function startApp(): void {
   setupData();
   initEvents();
 }
@@ -59,7 +59,7 @@ function initEvents(): void {
   rankList.addEventListener('click', handleListClick);
 }
 
-async function handleListClick(event: Event) {
+async function handleListClick(event: Event): void {
   let selectedId = '';
   if (event.target instanceof HTMLParagraphElement || event.target instanceof HTMLSpanElement) {
     selectedId = event.target.parentElement?.id || '';
@@ -86,7 +86,7 @@ async function handleListClick(event: Event) {
   isDeathLoading = false;
 }
 
-function setDeathsList(data: CountrySummaryInfo[]) {
+function setDeathsList(data: CountrySummaryInfo[]): void {
   const sorted = data.sort((a, b) => getUnixTimestamp(b.Date) - getUnixTimestamp(a.Date));
   sorted.forEach(value => {
     const li = document.createElement('li');
@@ -102,15 +102,15 @@ function setDeathsList(data: CountrySummaryInfo[]) {
   });
 }
 
-function clearDeathList() {
+function clearDeathList(): void {
   deathsList.innerHTML = '';
 }
 
-function setTotalDeathsByCountry(data: CountrySummaryInfo[]) {
+function setTotalDeathsByCountry(data: CountrySummaryInfo[]): void {
   deathsTotal.innerText = data[0].Cases.toString();
 }
 
-function setRecoveredList(data: CountrySummaryInfo[]) {
+function setRecoveredList(data: CountrySummaryInfo[]): void {
   const sorted = data.sort((a, b) => getUnixTimestamp(b.Date) - getUnixTimestamp(a.Date));
   sorted.forEach(value => {
     const li = document.createElement('li');
@@ -181,19 +181,28 @@ function setChartData(data: CountrySummaryInfo[]): void {
 }
 
 function setTotalConfirmedNumber(data: CovidSummaryResponse): void {
-  confirmedTotal.innerText = data.Countries.reduce((total, current) => (total += current.TotalConfirmed), 0).toString();
+  confirmedTotal.innerText = data.Countries.reduce(
+    (total: number, current: Country) => (total += current.TotalConfirmed),
+    0
+  ).toString();
 }
 
 function setTotalDeathsByWorld(data: CovidSummaryResponse): void {
-  deathsTotal.innerText = data.Countries.reduce((total, current) => (total += current.TotalDeaths), 0).toString();
+  deathsTotal.innerText = data.Countries.reduce(
+    (total: number, current: Country) => (total += current.TotalDeaths),
+    0
+  ).toString();
 }
 
 function setTotalRecoveredByWorld(data: CovidSummaryResponse): void {
-  recoveredTotal.innerText = data.Countries.reduce((total, current) => (total += current.TotalRecovered), 0).toString();
+  recoveredTotal.innerText = data.Countries.reduce(
+    (total: number, current: Country) => (total += current.TotalRecovered),
+    0
+  ).toString();
 }
 
 function setCountryRanksByConfirmedCases(data: CovidSummaryResponse): void {
-  const sorted = data.Countries.sort((a, b) => b.TotalConfirmed - a.TotalConfirmed);
+  const sorted = data.Countries.sort((a: Country, b: Country) => b.TotalConfirmed - a.TotalConfirmed);
   sorted.forEach(value => {
     const li = document.createElement('li');
     li.setAttribute('class', 'list-item flex align-center');
