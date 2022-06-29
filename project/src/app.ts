@@ -1,11 +1,16 @@
 import axios, { AxiosResponse } from 'axios';
 import { Chart } from 'chart.js';
 import { CovidSummaryResponse, Country, CountrySummaryInfo, CovidStatus } from './covid/index';
+
 // utils
+// function $<T extends HTMLElement>(selector: string): T {
+//   const element = document.querySelector(selector);
+//   return element as T
+// }
 function $(selector: string): HTMLElement {
   return document.querySelector(selector) as HTMLElement;
 }
-function getUnixTimestamp(date: string): number {
+function getUnixTimestamp(date: Date | string): number {
   return new Date(date).getTime();
 }
 
@@ -34,7 +39,6 @@ function createSpinnerElement(id: string): Element {
 
 // state
 let isDeathLoading = false;
-const isRecoveredLoading = false;
 
 // api
 function fetchCovidSummary(): Promise<AxiosResponse<CovidSummaryResponse>> {
@@ -59,7 +63,7 @@ function initEvents(): void {
   rankList.addEventListener('click', handleListClick);
 }
 
-async function handleListClick(event: Event): void {
+async function handleListClick(event: MouseEvent): Promise<void> {
   let selectedId = '';
   if (event.target instanceof HTMLParagraphElement || event.target instanceof HTMLSpanElement) {
     selectedId = event.target.parentElement?.id || '';
@@ -87,8 +91,10 @@ async function handleListClick(event: Event): void {
 }
 
 function setDeathsList(data: CountrySummaryInfo[]): void {
-  const sorted = data.sort((a, b) => getUnixTimestamp(b.Date) - getUnixTimestamp(a.Date));
-  sorted.forEach(value => {
+  const sorted = data.sort(
+    (a: CountrySummaryInfo, b: CountrySummaryInfo) => getUnixTimestamp(b.Date) - getUnixTimestamp(a.Date)
+  );
+  sorted.forEach((value: CountrySummaryInfo) => {
     const li = document.createElement('li');
     li.setAttribute('class', 'list-item-b flex align-center');
     const span = document.createElement('span');
@@ -111,7 +117,9 @@ function setTotalDeathsByCountry(data: CountrySummaryInfo[]): void {
 }
 
 function setRecoveredList(data: CountrySummaryInfo[]): void {
-  const sorted = data.sort((a, b) => getUnixTimestamp(b.Date) - getUnixTimestamp(a.Date));
+  const sorted = data.sort(
+    (a: CountrySummaryInfo, b: CountrySummaryInfo) => getUnixTimestamp(b.Date) - getUnixTimestamp(a.Date)
+  );
   sorted.forEach(value => {
     const li = document.createElement('li');
     li.setAttribute('class', 'list-item-b flex align-center');
@@ -144,7 +152,7 @@ function endLoadingAnimation(): void {
   recoveredList.removeChild(recoveredSpinner);
 }
 
-async function setupData() {
+async function setupData(): Promise<void> {
   const { data } = await fetchCovidSummary();
   setTotalConfirmedNumber(data);
   setTotalDeathsByWorld(data);
@@ -153,7 +161,7 @@ async function setupData() {
   setLastUpdatedTimestamp(data);
 }
 
-function renderChart(data: string[], labels: string[]): void {
+function renderChart(data: number[], labels: string[]): void {
   const ctx = ($('#lineChart') as HTMLCanvasElement).getContext('2d') as CanvasRenderingContext2D;
   Chart.defaults.color = '#f5eaea';
   Chart.defaults.font.family = 'Exo 2';
@@ -175,8 +183,10 @@ function renderChart(data: string[], labels: string[]): void {
 }
 
 function setChartData(data: CountrySummaryInfo[]): void {
-  const chartData = data.slice(-14).map(value => value.Cases.toString());
-  const chartLabel = data.slice(-14).map(value => new Date(value.Date).toLocaleDateString().slice(5, -1));
+  const chartData = data.slice(-14).map((value: CountrySummaryInfo) => value.Cases);
+  const chartLabel = data
+    .slice(-14)
+    .map((value: CountrySummaryInfo) => new Date(value.Date).toLocaleDateString().slice(5, -1));
   renderChart(chartData, chartLabel);
 }
 
